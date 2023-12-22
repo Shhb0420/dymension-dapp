@@ -122,12 +122,11 @@ export default function Home() {
         </Navbar>
         <div className="frame-thirdweb">
           <iframe
-            src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x1783D2A0b6F2b0e74db3ceEf6C76dd49eF3b36d4&chain=%7B%22name%22%3A%22arunika_6875752-1%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22http%3A%2F%2F207.180.204.176%3A8545%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22ARU%22%2C%22name%22%3A%22ARU%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22arunika6875752-1%22%2C%22chainId%22%3A6875752%2C%22testnet%22%3Atrue%2C%22slug%22%3A%22arunika6875752-1%22%2C%22icon%22%3A%7B%22url%22%3A%22ipfs%3A%2F%2FQmRNUYPhYmKP5ZpYRE6f3wcgWqEDKbN1Yj4Ao7qVnDo94p%2Fsnow.png%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=0f3b9b580d02c3a9add61698e2180b5f&theme=dark&primaryColor=green"
+            src="https://embed.ipfscdn.io/ipfs/bafybeicd3qfzelz4su7ng6n523virdsgobrc5pcbarhwqv3dj3drh645pi/?contract=0x57b5ae55B6C476D0FAb4b3651bcF15F7e8D14447&chain=%7B%22name%22%3A%22Arunika%22%2C%22chain%22%3A%22%22%2C%22rpc%22%3A%5B%22https%3A%2F%2Ffroopyland.dymension.xyz%2F24%2Farunika_6875752-1%2Fevmrpc%22%5D%2C%22nativeCurrency%22%3A%7B%22symbol%22%3A%22ARU%22%2C%22name%22%3A%22ARU%22%2C%22decimals%22%3A18%7D%2C%22shortName%22%3A%22arunika6875752-1%22%2C%22chainId%22%3A6875752%2C%22testnet%22%3Atrue%2C%22slug%22%3A%22arunika6875752-1%22%2C%22icon%22%3A%7B%22url%22%3A%22ipfs%3A%2F%2FQmRNUYPhYmKP5ZpYRE6f3wcgWqEDKbN1Yj4Ao7qVnDo94p%2Fsnow.png%22%2C%22width%22%3A50%2C%22height%22%3A50%2C%22format%22%3A%22%22%7D%7D&clientId=0f3b9b580d02c3a9add61698e2180b5f&theme=dark&primaryColor=cyan"
             width="600px"
             height="600px"
-            // style="max-width:100%;"
             frameborder="0"
-          ></iframe>
+        ></iframe>
         </div>
       </div>
       <Modal size="md" centered show={show} onHide={handleClose}>

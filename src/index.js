@@ -10,20 +10,20 @@ import 'react-toastify/dist/ReactToastify.css';
 const activeChain = {
   chainId: 6875752, // Chain ID of the network
   // Array of RPC URLs to use
-  rpc: ["http://207.180.204.176:8545"],
+  rpc: ["https://froopyland.dymension.xyz/24/arunika_6875752-1/evmrpc"],
 
   // === Information for adding the network to your wallet (how it will appear for first time users) === \\
   // Information about the chain's native currency (i.e. the currency that is used to pay for gas)
   nativeCurrency: {
     decimals: 18,
-    name: "arunika_6875752-1",
+    name: "Arunika",
     symbol: "ARU",
   },
   shortName: "ARU", // Display value shown in the wallet UI
-  slug: "arunika_6875752-1", // Display value shown in the wallet UI
+  slug: "Arunika", // Display value shown in the wallet UI
   testnet: true, // Boolean indicating whether the chain is a testnet or mainnet
-  chain: "arunika_6875752-1", // Name of the network
-  name: "arunika_6875752-1", // Name of the network
+  chain: "Arunika", // Name of the network
+  name: "Arunika", // Name of the network
 }
 
 const container = document.getElementById("root");
