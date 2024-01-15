@@ -12,6 +12,7 @@
     "@thirdweb-dev/sdk": "^4",
     "assert": "^2.0.0",
     "browserify-zlib": "latest",
+    "cloudinary-react": "^1.8.1",
     "date-fns": "^3.2.0",
     "ethers": "^5",
     "http": "npm:http-browserify",

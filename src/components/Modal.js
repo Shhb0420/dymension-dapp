@@ -17,7 +17,6 @@ const Modal = ({
   const [showModal, setShowModal] = useState(isOpen);
 
   useEffect(() => {
-    console.log('wkwkwkwkwkwkwkwkk', isOpen)
     setShowModal(isOpen)
   }, [isOpen])
   
@@ -74,9 +73,9 @@ const Modal = ({
     return null
   }
 
-  useEffect(() => {
-    console.log('isOpen', isOpen)
-  },[isOpen])
+//   useEffect(() => {
+//     console.log('isOpen', isOpen)
+//   },[isOpen])
 
   return (
     <>
@@ -168,7 +167,6 @@ const Modal = ({
               </div>
               {/* BODY */}
               <div className='relative p-6 flex-auto'>
-            {console.log('wkwkwkwk kebuka nih')}
                 {body}
               </div>
               {/* FOOTER */}

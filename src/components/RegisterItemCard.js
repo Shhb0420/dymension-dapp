@@ -4,10 +4,7 @@ import { TiPlus } from "react-icons/ti";
 import useItemModal from 'hooks/useItemModal';
 
 function RegisterItemCard() {
-    const itemModal = useItemModal((state) => {
-        console.log('isOpenwewew', state)
-        return state.onOpen
-    })
+    const itemModal = useItemModal()
   return (
     <div className="flex flex-col items-center mt-40 gap-4">
     <div
@@ -24,7 +21,7 @@ function RegisterItemCard() {
       "
     >
       <div
-        onClick={itemModal}
+        onClick={() => itemModal.onOpen()}
         className='
           p-2
           bg-yellow-400
@@ -56,7 +53,7 @@ function RegisterItemCard() {
     >
       <Button 
         label="Register an Item"
-        onClick={itemModal}
+        onClick={() => itemModal.onOpen()}
         small
       />
     </div>

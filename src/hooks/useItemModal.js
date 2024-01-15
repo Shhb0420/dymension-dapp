@@ -32,7 +32,6 @@ const useItemModal = create((set) => ({
     bidderIds: [""],
   },
   onOpen: (data, action) => {
-    console.log('jalaan dong', {data, action})
     set({ isOpen: true })
     set({ item: data })
     set({ action })

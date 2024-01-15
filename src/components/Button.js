@@ -1,7 +1,6 @@
 import React from "react";
 
 function Button({ label, onClick, disabled, outline, small, Icon, htmlLabel }) {
-  console.log(onClick, 'ini onClick')
   return (
     <button
       onClick={onClick}

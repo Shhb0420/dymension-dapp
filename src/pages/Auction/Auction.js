@@ -4,6 +4,7 @@ import Navbar from "./Navbar";
 import CardItem from "components/CardItem";
 import Footer from "components/Footer";
 import RegisterItemCard from "components/RegisterItemCard";
+import ItemModal from "components/ItemModal";
 
 const Auction = () => {
   const isDataCard = [
@@ -71,6 +72,7 @@ const Auction = () => {
       </div>
       </Container>
       <Footer />
+      <ItemModal />
     </>
   );
 };

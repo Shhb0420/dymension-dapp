@@ -6,7 +6,11 @@ import Heading from "./Heading";
 import Modal from "./Modal";
 import { FieldValues, SubmitHandler, useForm } from "react-hook-form";
 import { Range } from "react-date-range";
+import { toast } from "react-hot-toast";
 import { addDays, setDate } from "date-fns";
+import ImageUpload from "./ImageUpload";
+import Input from "./Input";
+import Calender from "./Calender";
 
 
 const ItemModal = () => {
@@ -27,6 +31,9 @@ const ItemModal = () => {
   const itemModal = useItemModal();
   const [isStepModal, setIsStepModal] = useState(0);
   const [isModal, setIsModal] = useState(false);
+  const [isLoading, setIsLoading] = useState(false)
+  const [dateRange, setDateRange] = useState(initialDateRange)
+
 
   const {
     register,
@@ -53,6 +60,14 @@ const ItemModal = () => {
 
   const imageSrc = watch('imageSrc')
 
+  const setCustomValue = (id, value) => {
+    setValue(id, value, {
+      shouldValidate: true,
+      shouldDirty: true,
+      shouldTouch: true,
+    })
+  }
+
   const onBack = () => {
     setIsStepModal((val) => val - 1);
   };
@@ -76,6 +91,23 @@ const ItemModal = () => {
     if(isStepModal === isSteps.information) return undefined
     return 'Back'
   }, [isStepModal])
+
+  const onSubmit = (data) => {
+    if (isStepModal !== isSteps.price) return onNext()
+    data.startDate = dateRange.startDate
+    data.endDate = dateRange.endDate
+
+
+    setIsLoading(true)
+
+    for(let key in data) {
+      if(key !== "isActive") {
+        if(!data[key]) {
+          return toast.error("Please fill up all the required data")
+        }
+      }
+    }
+  }
 
 
   let bodyContent = (
@@ -116,24 +148,115 @@ const ItemModal = () => {
     </div>
   );
 
-  useEffect(() => {
-    if(itemModal.action) {
-      const defaultValue = watch()
-      Object.keys(defaultValue).forEach((key) => {
-        if(key.includes("Date")) {
-          console.log(key, 'masuk', new Date(itemModal.item[key]))
-          setDateRange({startDate: new Date(itemModal.item["startDate"]), key: "selection", endDate: new Date(itemModal.item["endDate"])})
-        } else {
-          setValue(key, itemModal.item[key])
-        }
-      })
-    }
-  }, [itemModal.action, itemModal.item, setValue, watch])
+  if (isStepModal === isSteps.images) {
+    bodyContent = (
+      <div className="flex flex-col gap-8">
+        <Heading 
+          title="Add a photo of your item"
+          subtitle="Show bidders what your item looks like!"
+        />
+        <ImageUpload 
+        //   value={imageSrc}
+        //   onChange={(value) => setCustomValue('imageSrc', value)}
+        />
+      </div>
+    )
+  }
 
-  useEffect(() => {
-    console.log('ItemModal', itemModal.isOpen)
-  },[itemModal.isOpen])
+  if (isStepModal === isSteps.description) {
+    bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading 
+            title="How would you describe your item?"
+            subtitle="Short and clear work best!"
+          />
+          <Input 
+            id="title"
+            label="Title"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            watch={watch}
+            required
+          />
+          <hr />
+          <Input 
+            id="description"
+            label="Description"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            watch={watch}
+            required
+          />
+        </div>
+      )
+  }
+
+  if (isStepModal === isSteps.time) {
+    bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading 
+            title="How long would you like this item to be auctioned for?"
+            subtitle="Your item will be eligible for auction starting one day after it is listed, and auctions take place everyday at 10 AM."
+          />
+          <Calender
+            value={dateRange}
+            onChange={(value) => setDateRange(value.selection)}
+          />
+        </div>
+      )
+  }
+
+  if (isStepModal === isSteps.price) {
+    bodyContent = (
+        <div className="flex flex-col gap-8">
+          <Heading 
+            title="Now, set your price"
+            subtitle="Set the initial price and the buyout price too"
+          />
+          <Input 
+            id="initialPrice"
+            label="Initial Price"
+            formatPrice
+            type="number"
+            disabled={isLoading}
+            register={register}
+            errors={errors}
+            required
+            watch={watch}
+          />
+          <hr />
+          <Input 
+            id="buyoutPrice"
+            label="Buyout Price"
+            formatPrice
+            type="number"
+            disabled={isLoading}
+            register={register}
+            required
+            errors={errors}
+            watch={watch}
+          />
+        </div>
+      )
+  }
+
+//   useEffect(() => {
+//     if(itemModal.action) {
+//       const defaultValue = watch()
+//       Object.keys(defaultValue).forEach((key) => {
+//         if(key.includes("Date")) {
+//           console.log(key, 'masuk', new Date(itemModal.item[key]))
+//           setDateRange({startDate: new Date(itemModal.item["startDate"]), key: "selection", endDate: new Date(itemModal.item["endDate"])})
+//         } else {
+//           setValue(key, itemModal.item[key])
+//         }
+//       })
+//     }
+//   }, [itemModal.action, itemModal.item, setValue, watch])
   return (
+    <>
     <Modal
       title="List an Item"
       isOpen={itemModal.isOpen}
@@ -144,6 +267,7 @@ const ItemModal = () => {
       secondaryAction={isStepModal === isSteps.information ? undefined : onBack}
       body={bodyContent}
     />
+    </>
   );
 };
 
