@@ -3,9 +3,9 @@ import { createRoot } from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
-import "./styles/globals.css";
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'react-toastify/dist/ReactToastify.css';
+import "styles/globals.css";
+// import 'bootstrap/dist/css/bootstrap.min.css';
+// import 'react-toastify/dist/ReactToastify.css';
 
 const activeChain = {
   chainId: 6875752, // Chain ID of the network

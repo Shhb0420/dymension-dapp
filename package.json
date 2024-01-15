@@ -4,29 +4,38 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@craco/craco": "^7.1.0",
     "@testing-library/jest-dom": "^5.16.5",
     "@testing-library/react": "^13.4.0",
     "@testing-library/user-event": "^14.4.3",
     "@thirdweb-dev/react": "^4",
     "@thirdweb-dev/sdk": "^4",
     "assert": "^2.0.0",
-    "bootstrap": "^5.3.2",
     "browserify-zlib": "latest",
+    "date-fns": "^3.2.0",
     "ethers": "^5",
     "http": "npm:http-browserify",
     "http-browserify": "latest",
     "https": "npm:https-browserify",
     "https-browserify": "latest",
+    "postcss": "^8.4.33",
+    "postcss-flexbugs-fixes": "^5.0.2",
+    "postcss-preset-env": "^9.3.0",
     "react": "^18.2",
-    "react-bootstrap": "^2.9.1",
+    "react-countdown": "^2.3.5",
+    "react-date-range": "^2.0.0-alpha.4",
     "react-dom": "^18.2",
+    "react-hook-form": "^7.49.3",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^5.0.0",
+    "react-router-dom": "^6.21.1",
     "react-scripts": "^5.0.1",
     "react-snowfall": "^1.2.1",
-    "react-toastify": "^9.1.3",
     "stream": "^0.0.2",
     "url": "latest",
     "web-vitals": "^3.1.0",
-    "zlib": "npm:browserify-zlib"
+    "zlib": "npm:browserify-zlib",
+    "zustand": "^4.3.7"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -52,5 +61,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.1"
   }
 }
