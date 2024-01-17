@@ -29,3 +29,17 @@ export const createItem = (payload) => {
       })
   })
 }
+
+export const createBid = (payload) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${BASE_URL}/bid`, payload)
+      .then((response) => {
+        const { data } = response.data
+        resolve(data)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}

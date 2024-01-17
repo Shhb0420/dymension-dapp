@@ -43,3 +43,18 @@ export const getListItem = () => {
       })
   })
 }
+
+export const getListBid = (itemId) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .get(`${BASE_URL}/bid/${itemId}`)
+      .then((response) => {
+        const { data } = response.data
+        resolve(data)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
