@@ -1,12 +1,35 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "components/Container";
 import Navbar from "./Navbar";
 import CardItem from "components/CardItem";
 import Footer from "components/Footer";
 import RegisterItemCard from "components/RegisterItemCard";
 import ItemModal from "components/ItemModal";
+import { useAddress } from "@thirdweb-dev/react";
+import { getListItem, getUser } from "api/get";
 
 const Auction = () => {
+  const address = useAddress()
+  const [itemList, setItemList] = useState(null)
+
+  const handleGetUser = async () => {
+    await getUser()
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
+  }
+
+  const getItem = async () => {
+    await getListItem()
+    .then((res) => {
+      setItemList(res)
+    })
+    .catch((err) => console.log(err))
+  }
+
   const isDataCard = [
     {
       title: "Vintage Turntable",
@@ -47,6 +70,12 @@ const Auction = () => {
         winnerId: null,
       },
   ];
+
+  useEffect(() => {
+    handleGetUser()
+    getItem()
+  }, [])
+
   return (
     <>
       <Navbar />
@@ -63,8 +92,10 @@ const Auction = () => {
           h-screen
         "
       >
-    <RegisterItemCard />
-      {isDataCard.map((val) => {
+        { address ? (
+          <RegisterItemCard />
+        ) : null}
+      {itemList?.map((val) => {
         return (
             <CardItem data={val} />
         )

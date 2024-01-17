@@ -11,6 +11,9 @@ import { addDays, setDate } from "date-fns";
 import ImageUpload from "./ImageUpload";
 import Input from "./Input";
 import Calender from "./Calender";
+import { useAddress, useBalance } from "@thirdweb-dev/react";
+import { createItem, login } from "api/post";
+import { getUserByAddress } from "api/get";
 
 
 const ItemModal = () => {
@@ -34,6 +37,45 @@ const ItemModal = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [dateRange, setDateRange] = useState(initialDateRange)
 
+  const address = useAddress()
+  const { data, balanceLoading} = useBalance()
+  const [user, setUser] = useState(null)
+
+  const getByAddress = async () => {
+    let result
+    await getUserByAddress(address)
+    .then((res) => {
+      if(!res) {
+        const payload = {
+          address,
+          balance: parseFloat(data.displayValue),
+          isLogin: true,
+          itemIds: [],
+          winItemIds: [],
+          watchedItems: [],
+          biddedItems: [],
+          bids: [],
+          history: []
+        }
+
+        login(payload)
+        .then((res) => {
+          setUser(res)
+          result = res
+        })
+      } else {
+        setUser(res)
+        result = res
+      }
+    })
+    .catch((err) => err)
+
+    return result
+  }
+
+  const handleLogin = async () => {
+    const detail = await getByAddress()
+  }
 
   const {
     register,
@@ -51,10 +93,15 @@ const ItemModal = () => {
       startDate: new Date(),
       endDate: new Date(),
       isActive: false,
-      imageSrc: '',
-      category: '',
+      isEnded: false,
       buyoutPrice: 1,
-      initialPrice: 1
+      initialPrice: 1,
+      imageSrc: '',
+      winnerId: null,
+      winnerBidId: null,
+      joinedUserIds: [],
+      watchBy: [],
+      bids: []
     }
   })
 
@@ -92,21 +139,31 @@ const ItemModal = () => {
     return 'Back'
   }, [isStepModal])
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (isStepModal !== isSteps.price) return onNext()
     data.startDate = dateRange.startDate
     data.endDate = dateRange.endDate
-
-
+    data.ownerId = address
+    data.initialPrice = Number(data.initialPrice)
+    data.buyoutPrice = Number(data.buyoutPrice)
+    
     setIsLoading(true)
 
-    for(let key in data) {
-      if(key !== "isActive") {
-        if(!data[key]) {
-          return toast.error("Please fill up all the required data")
-        }
-      }
-    }
+    // for(let key in data) {
+    //   if(key !== "isActive") {
+    //     if(!data[key]) {
+    //       return toast.error("Please fill up all the required data")
+    //     }
+    //   }
+    // }
+
+    await createItem(data)
+    .then((res) => {
+      console.log(res)
+    })
+    .catch((err) => {
+      console.log(err)
+    })
   }
 
 
@@ -143,7 +200,7 @@ const ItemModal = () => {
       <div>
         <div>Thank you for your understanding.</div>
         <div className="mt-1">Regards,</div>
-        <div className="font-semibold">AuctionHive Team</div>
+        <div className="font-semibold">Arunika Auction Team</div>
       </div>
     </div>
   );
@@ -156,8 +213,9 @@ const ItemModal = () => {
           subtitle="Show bidders what your item looks like!"
         />
         <ImageUpload 
-        //   value={imageSrc}
-        //   onChange={(value) => setCustomValue('imageSrc', value)}
+          // value={imageSrc}
+          changeValue={setCustomValue}
+          // onChange={(value) => setCustomValue('imageSrc', value)}
         />
       </div>
     )
@@ -255,6 +313,14 @@ const ItemModal = () => {
 //       })
 //     }
 //   }, [itemModal.action, itemModal.item, setValue, watch])
+
+
+useEffect(() => {
+  if(address) {
+    handleLogin()
+  }
+}, [address])
+
   return (
     <>
     <Modal

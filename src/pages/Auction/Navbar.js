@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Container from "components/Container";
 import Logos from "./Logos";
-import { ConnectWallet } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, useBalance } from "@thirdweb-dev/react";
+import { getUserByAddress } from "api/get";
+import { login } from "api/post";
 // import { Logo, Dymension } from "styles/images";
 
 const Navbar = () => {
+
   return (
     <div className="py-4 border-b-[1px]">
       <Container>
