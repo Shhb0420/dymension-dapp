@@ -1,16 +1,17 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Container from "components/Container";
 import Logos from "./Logos";
-import { ConnectWallet } from "@thirdweb-dev/react";
-import { useAddress } from "@thirdweb-dev/react";
+import { ConnectWallet, useAddress, useBalance } from "@thirdweb-dev/react";
 import wallet from "wallet";
 import toast from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
+import { getUserByAddress } from "api/get";
+import { login } from "api/post";
 // import { Logo, Dymension } from "styles/images";
 
 const Navbar = () => {
   const address = useAddress();
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
   const sendFaucet = async (e) => {
     const isToastLoading = toast.loading("Faucet is in progress...", {
@@ -61,7 +62,7 @@ const Navbar = () => {
               lg:gap-0
             "
         >
-          <Logos navigate={() => navigate('/')} />
+          <Logos navigate={() => navigate("/")} />
           <div class="hidden sm:ml-6 sm:block">
             <div class="flex space-x-4">
               <button
@@ -75,7 +76,7 @@ const Navbar = () => {
                 RollApps
               </button>
               <button
-                className="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold"
+                className="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold focus:bg-yellow-400 focus:text-white active:bg-yellow-400 active:text-white"
                 onClick={() => navigate("/")}
               >
                 Home
@@ -83,20 +84,20 @@ const Navbar = () => {
               {address && (
                 <button
                   onClick={sendFaucet}
-                  className="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold"
+                  className="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold focus:bg-yellow-400 focus:text-white active:bg-yellow-400 active:text-white"
                 >
                   Get Faucet
                 </button>
               )}
               <button
-                class="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold"
+                className="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold focus:bg-yellow-400 focus:text-white active:bg-yellow-400 active:text-white"
                 onClick={() => navigate("/mint-nft")}
               >
                 Mint NFT
               </button>
               {address && (
                 <button
-                  class="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold"
+                  className="text-black hover:bg-yellow-400 hover:text-white rounded-md px-3 py-2 text-lg font-extrabold focus:bg-yellow-400 focus:text-white active:bg-yellow-400 active:text-white"
                   onClick={() => navigate("/my-items")}
                 >
                   My Items

@@ -2,7 +2,7 @@ import React, {useCallback, useState} from 'react'
 import { TbPhotoPlus } from "react-icons/tb"
 import { Image, Transformation } from 'cloudinary-react';
 
-const ImageUpload = () => {
+const ImageUpload = ({changeValue}) => {
     const [image, setImage] = useState('');
     const cloudName = process.env.REACT_APP_CLOUDINARY_NAME;
     const apiKey = '843355578652474';
@@ -26,6 +26,7 @@ const ImageUpload = () => {
             if(data.secure_url) {
                 console.log(data);
                 setImage(data.secure_url);
+                changeValue('imageSrc', data.secure_url)
             }
           })
           .catch((error) => {
