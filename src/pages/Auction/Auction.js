@@ -5,6 +5,7 @@ import CardItem from "components/CardItem";
 import Footer from "components/Footer";
 import RegisterItemCard from "components/RegisterItemCard";
 import ItemModal from "components/ItemModal";
+import { Toaster } from "react-hot-toast";
 
 const Auction = () => {
   const isDataCard = [
@@ -49,6 +50,7 @@ const Auction = () => {
   ];
   return (
     <>
+    <Toaster position="top-right" reverseOrder={false} />
       <Navbar />
       <Container>
       <div
