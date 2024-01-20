@@ -29,3 +29,31 @@ export const createItem = (payload) => {
       })
   })
 }
+
+export const bidItem = (payload) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${BASE_URL}/bid`, payload)
+      .then((response) => {
+        const { data } = response.data
+        resolve(data)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}
+
+export const buyoutItem = (payload) => {
+  return new Promise((resolve, reject) => {
+    axios
+      .post(`${BASE_URL}/bid/buyout`, payload)
+      .then((response) => {
+        const { data } = response.data
+        resolve(data)
+      })
+      .catch((err) => {
+        reject(err)
+      })
+  })
+}

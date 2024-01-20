@@ -105,8 +105,6 @@ const ItemModal = () => {
     }
   })
 
-  const imageSrc = watch('imageSrc')
-
   const setCustomValue = (id, value) => {
     setValue(id, value, {
       shouldValidate: true,

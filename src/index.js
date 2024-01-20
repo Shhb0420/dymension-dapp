@@ -8,7 +8,7 @@ import "styles/globals.css";
 // import 'react-toastify/dist/ReactToastify.css';
 
 const activeChain = {
-  chainId: 6875752, // Chain ID of the network
+  chainId: 0x68ea68, // Chain ID of the network
   // Array of RPC URLs to use
   rpc: ["https://froopyland.dymension.xyz/24/arunika_6875752-1/evmrpc"],
 

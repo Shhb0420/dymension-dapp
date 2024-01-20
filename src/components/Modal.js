@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { IoMdClose } from 'react-icons/io'
 import Button from "./Button";
+import { Web3Button } from "@thirdweb-dev/react";
 
 const Modal = ({
   isOpen,
@@ -13,6 +14,9 @@ const Modal = ({
   disabled,
   secondaryAction,
   secondaryActionLabel,
+  secondActionLabel,
+  secondOnSubmit,
+  secondDisabled
 }) => {
   const [showModal, setShowModal] = useState(isOpen);
 
@@ -193,6 +197,13 @@ const Modal = ({
                     label={actionLabel}
                     onClick={handleSubmit}
                   />
+                  {secondActionLabel && (
+                  <Button 
+                    disabled={secondDisabled}
+                    label={secondActionLabel}
+                    onClick={secondOnSubmit}
+                  />
+                  )}
                 </div>
                 {footer}
               </div>

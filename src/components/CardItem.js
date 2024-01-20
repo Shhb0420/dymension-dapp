@@ -1,28 +1,168 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { MdOutlineHive } from "react-icons/md";
 import {
-  ConnectWallet,
   useAddress,
   useConnect,
+  useTokenBalance,
+  useContract,
   metamaskWallet,
+  useTransferToken,
+  useBalance,
 } from "@thirdweb-dev/react";
 import Timer from "./Timer";
 import Button from "./Button";
 import useItemModal from "hooks/useItemModal";
+import Modal from "./Modal";
+import Heading from "./Heading";
+import { getBidItem } from "api/get";
+import { bidItem, buyoutItem } from "api/post";
+import wallet from "wallet";
+import { ethers } from "ethers";
 
-const CardItem = ({ data, currentUser }) => {
-    const itemModal = useItemModal()
+const CardItem = ({ data, key }) => {
+  const [isModal, setIsModal] = useState(false);
+  const [isValueBid, setIsValueBid] = useState();
+  const [isValueBuyOut, setIsValueBuyOut] = useState();
+  const [getValueBid, setGetValueBid] = useState();
   const isAddressConnected = useAddress();
   const connect = useConnect();
   const walletConfig = metamaskWallet();
 
   async function handleConnect() {
     try {
-      const wallet = await connect(walletConfig);
+      await connect(walletConfig);
     } catch (e) {
       console.error("failed to connect", e);
     }
   }
+
+  const openModal = async () => {
+    await getBidItem(data._id)
+      .then((response) => {
+        const isPayload = response[0];
+        setIsModal(true);
+        setIsValueBuyOut({
+          userId: isAddressConnected,
+          itemId: data._id,
+          action: "buyout",
+          isActive: true,
+          amount: data.buyoutPrice,
+        });
+      })
+      .catch((err) => {
+        console.log("err", err);
+      });
+  };
+
+  const closeModal = () => {
+    setIsModal(false);
+    setIsValueBid();
+    setIsValueBuyOut();
+  };
+
+  const bodyContent = (
+    <div className="flex flex-col gap-8">
+      <Heading title="Now, set your price Bid or Buy out" />
+      <div class="mb-1">
+        <label
+          for="bidAction"
+          class="block mb-2 text-sm font-medium text-black"
+        >
+          Bid
+        </label>
+        <input
+          type="number"
+          id="bidAction"
+          className="border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          value={isValueBid}
+          onChange={(e) => setIsValueBid(e.target.value)}
+          required
+        />
+      </div>
+      <div class="mb-1">
+        <label
+          for="buyOutAction"
+          class="block mb-2 text-sm font-medium text-black"
+        >
+          Buy Out
+        </label>
+        <input
+          type="number"
+          id="buyOutAction"
+          className="bg-gray-50 border border-gray-300 text-black text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:focus:ring-blue-500 dark:focus:border-blue-500"
+          value={isValueBuyOut?.amount}
+          disabled
+        />
+      </div>
+    </div>
+  );
+
+  const handleSubmitBuyOut = async () => {
+    try {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum,
+        "any"
+      );
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+
+      const contractAddress = "0x9Dcf8c40a5b1f4DB6920dDddFE86A4692Cd23074";
+
+      const transaction = await signer.sendTransaction({
+        to: contractAddress,
+        value: ethers.utils.parseEther(String(isValueBuyOut?.amount)),
+      });
+
+      if (transaction.hash) {
+        await buyoutItem(isValueBuyOut)
+          .then((res) => {
+            closeModal();
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
+      }
+    } catch (error) {
+      console.log("err", error);
+    }
+  };
+
+  const handleSubmitBid = async () => {
+    const payload = {
+      userId: isAddressConnected,
+      itemId: data._id,
+      action: "bid",
+      isActive: true,
+      amount: isValueBid,
+    };
+    try {
+      const provider = new ethers.providers.Web3Provider(
+        window.ethereum,
+        "any"
+      );
+      await provider.send("eth_requestAccounts", []);
+      const signer = provider.getSigner();
+
+      const contractAddress = "0x9Dcf8c40a5b1f4DB6920dDddFE86A4692Cd23074";
+
+      const transaction = await signer.sendTransaction({
+        to: contractAddress,
+        value: ethers.utils.parseEther(String(isValueBid)),
+      });
+
+      if (transaction.hash) {
+        await bidItem(payload)
+          .then(() => {
+            closeModal();
+          })
+          .catch((err) => {
+            console.log("err", err);
+          });
+      }
+    } catch (error) {
+      console.log("errr", error);
+    }
+  };
 
   return (
     <div
@@ -31,6 +171,7 @@ const CardItem = ({ data, currentUser }) => {
         pt-5
         pl-10
       "
+      key={key}
     >
       <div className="flex flex-col gap-2 w-full">
         <div
@@ -58,7 +199,7 @@ const CardItem = ({ data, currentUser }) => {
           />
         </div>
         <div
-        //   onClick={() => handleCreateAuction()}
+          //   onClick={() => handleCreateAuction()}
           className="cursor-pointer font-semibold text-lg flex-row flex items-center"
         >
           {data.title}
@@ -87,9 +228,7 @@ const CardItem = ({ data, currentUser }) => {
             </div>
             <Button
               label="Bid"
-              onClick={
-                isAddressConnected ? console.log("lalal") : handleConnect
-              }
+              onClick={isAddressConnected ? openModal : handleConnect}
               small
             />
             {/* {showConnectWallet && <ConnectWallet />} */}
@@ -135,6 +274,16 @@ const CardItem = ({ data, currentUser }) => {
           </div>
         )}
       </div>
+      <Modal
+        title={"Auction Bid"}
+        isOpen={isModal}
+        onClose={closeModal}
+        secondActionLabel={"Buy out"}
+        actionLabel={"Bid"}
+        body={bodyContent}
+        secondOnSubmit={() => handleSubmitBuyOut()}
+        onSubmit={() => handleSubmitBid()}
+      />
     </div>
   );
 };
