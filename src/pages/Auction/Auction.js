@@ -12,10 +12,6 @@ import { getListItem, getUser } from "api/get";
 const Auction = () => {
   const address = useAddress()
   const [itemList, setItemList] = useState(null)
-  const [isModal, setIsModal] = useState(false)
-
-  const openModal = () => setIsModal(!isModal);
-  const closeModal = () => setIsModal(!isModal);
 
   const handleGetUser = async () => {
     await getUser()

@@ -18,6 +18,7 @@ import { getBidItem } from "api/get";
 import { bidItem, buyoutItem } from "api/post";
 import wallet from "wallet";
 import { ethers } from "ethers";
+import { ImagePlaceHolder } from "styles/images";
 
 const CardItem = ({ data, key }) => {
   const [isModal, setIsModal] = useState(false);
@@ -59,6 +60,10 @@ const CardItem = ({ data, key }) => {
     setIsValueBid();
     setIsValueBuyOut();
   };
+
+  const truncateAddress = (address) => {
+    return `${address.slice(0, 6)}...${address.slice(-4)}`;
+};
 
   const bodyContent = (
     <div className="flex flex-col gap-8">
@@ -239,8 +244,9 @@ const CardItem = ({ data, key }) => {
             <div className="text-sm">
               The auction has ended and the highest bid placed was{" "}
               <div className="inline-flex flex-row items-baseline text-base font-semibold">
-                <MdOutlineHive className="ml-1" size={12} />
+                {/* <MdOutlineHive className="ml-1" size={12} /> */}
                 {data?.bids?.[data?.bids?.length - 1]?.amount}
+                <strong> ARU</strong>
               </div>
               . Congratulations to the winning bidder!
             </div>
@@ -253,14 +259,14 @@ const CardItem = ({ data, key }) => {
             "
             >
               <div>
-                Winner <strong>{data?.winner?.username}</strong>
+                Winner <strong>{truncateAddress(data?.winnerId)}</strong>
               </div>
               <img
                 className="rounded-full bg-slate-600 w-8 h-8 object-cover"
                 width="30"
                 height="30"
                 alt="Avatar"
-                src="styles/images/placeholder.jpg"
+                src={ImagePlaceHolder}
               />
             </div>
           </div>
