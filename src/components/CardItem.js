@@ -19,6 +19,7 @@ import { bidItem, buyoutItem } from "api/post";
 import wallet from "wallet";
 import { ethers } from "ethers";
 import { ImagePlaceHolder } from "styles/images";
+import toast from "react-hot-toast";
 
 const CardItem = ({ data, key }) => {
   const [isModal, setIsModal] = useState(false);
@@ -103,6 +104,13 @@ const CardItem = ({ data, key }) => {
   );
 
   const handleSubmitBuyOut = async () => {
+    const isToastLoading = toast.loading("Loading...", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
+      });
     try {
       const provider = new ethers.providers.Web3Provider(
         window.ethereum,
@@ -121,13 +129,43 @@ const CardItem = ({ data, key }) => {
       if (transaction.hash) {
         await buyoutItem(isValueBuyOut)
           .then((res) => {
+            toast.dismiss(isToastLoading);
+            toast.success(`✅ Succesfully Buyout`, {
+                duration: 3000,
+                // icon: "🚀🚀🚀",
+                style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+                },
+            });
             closeModal();
           })
           .catch((err) => {
+            toast.dismiss(isToastLoading);
+            toast.error(`Fail Buyout`, {
+                duration: 3000,
+                // icon: "🚀🚀🚀",
+                style: {
+                borderRadius: "10px",
+                background: "#333",
+                color: "#fff",
+                },
+            });
             console.log("err", err);
           });
       }
     } catch (error) {
+        toast.dismiss(isToastLoading);
+        toast.error(`Fail Buyout`, {
+            duration: 3000,
+            // icon: "🚀🚀🚀",
+            style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+            },
+        });
       console.log("err", error);
     }
   };
@@ -140,31 +178,70 @@ const CardItem = ({ data, key }) => {
       isActive: true,
       amount: isValueBid,
     };
-    try {
-      const provider = new ethers.providers.Web3Provider(
-        window.ethereum,
-        "any"
-      );
-      await provider.send("eth_requestAccounts", []);
-      const signer = provider.getSigner();
 
-      const contractAddress = "0x9Dcf8c40a5b1f4DB6920dDddFE86A4692Cd23074";
-
-      const transaction = await signer.sendTransaction({
-        to: contractAddress,
-        value: ethers.utils.parseEther(String(isValueBid)),
+    const isToastLoading = toast.loading("Loading...", {
+        style: {
+          borderRadius: "10px",
+          background: "#333",
+          color: "#fff",
+        },
       });
 
-      if (transaction.hash) {
-        await bidItem(payload)
-          .then(() => {
-            closeModal();
-          })
-          .catch((err) => {
-            console.log("err", err);
-          });
-      }
+    try {
+        if(data?.initialPrice <= isValueBid) {
+            const provider = new ethers.providers.Web3Provider(
+              window.ethereum,
+              "any"
+            );
+            await provider.send("eth_requestAccounts", []);
+            const signer = provider.getSigner();
+      
+            const contractAddress = "0x9Dcf8c40a5b1f4DB6920dDddFE86A4692Cd23074";
+      
+            const transaction = await signer.sendTransaction({
+              to: contractAddress,
+              value: ethers.utils.parseEther(String(isValueBid)),
+            });
+      
+            if (transaction.hash) {
+              await bidItem(payload)
+                .then(() => {
+                toast.dismiss(isToastLoading);
+                toast.success(`✅ Succesfully Bidding`, {
+                    duration: 3000,
+                    // icon: "🚀🚀🚀",
+                    style: {
+                    borderRadius: "10px",
+                    background: "#333",
+                    color: "#fff",
+                    },
+                });
+                  closeModal();
+                })
+                .catch((err) => {
+                  console.log("err", err);
+                });
+            }
+        }
+        toast.dismiss(isToastLoading);
+        toast.error(`Bidding must be greater than last bid and initial price`, {
+            duration: 3000,
+            style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+            },
+        });
     } catch (error) {
+        toast.dismiss(isToastLoading);
+        toast.error(`Failed Bid, try again!`, {
+            duration: 3000,
+            style: {
+            borderRadius: "10px",
+            background: "#333",
+            color: "#fff",
+            },
+        });
       console.log("errr", error);
     }
   };
