@@ -213,22 +213,24 @@ const CardItem = ({ data, key }) => {
           <>
             <div className="font-light text-neutral-700">
               <div className="flex flex-row items-center">
-                Start Price: <MdOutlineHive className="ml-2" size={12} />
+                Start Price:
                 {data.initialPrice}
+                <strong className="font-semibold ml-1">ARU</strong>
               </div>
               <div className="flex flex-row items-center">
-                Buyout Price: <MdOutlineHive className="ml-2" size={12} />
+                Buyout Price:
                 {data.buyoutPrice}
+                <strong className="font-semibold ml-1">ARU</strong>
               </div>
             </div>
             <div className="font-light text-neutral-700">
               <div className="flex flex-row items-center">Last Bid:</div>
               <div className="flex flex-row items-center">
-                <strong className="font-semibold">
-                  {data?.bids?.[data?.bids?.length - 1]?.user.username || "Wow"}
-                </strong>{" "}
-                <MdOutlineHive className="ml-2" size={12} />
+                {/* <div className="font-normal">
+                  {data?.bids?.[data?.bids?.length - 1]?.userId && truncateAddress(data?.bids?.[data?.bids?.length - 1]?.userId)}
+                </div>{" "} */}
                 {data?.bids?.[data?.bids?.length - 1]?.amount || 0}
+                <strong className="font-semibold ml-1">ARU</strong>
               </div>
             </div>
             <Button
